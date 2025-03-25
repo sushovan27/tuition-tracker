@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function handleLogin() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    const username = document.getElementById('login-username').value;
+    const password = document.getElementById('login-password').value;
     const error = document.getElementById('login-error');
 
     fetch('http://localhost:3000/login', {
@@ -33,11 +33,37 @@ function handleLogin() {
     .catch(() => error.textContent = 'Server error');
 }
 
+function handleSignup() {
+    const username = document.getElementById('signup-username').value;
+    const password = document.getElementById('signup-password').value;
+    const error = document.getElementById('signup-error');
+
+    fetch('http://localhost:3000/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            error.textContent = data.error;
+        } else {
+            userId = data.userId;
+            localStorage.setItem('userId', userId);
+            loadTuitionData();
+            showDashboard();
+            error.textContent = '';
+        }
+    })
+    .catch(() => error.textContent = 'Server error');
+}
+
 function handleLogout() {
     userId = null;
     localStorage.removeItem('userId');
-    document.getElementById('login-page').style.display = 'flex';
+    document.getElementById('auth-page').style.display = 'flex';
     document.getElementById('dashboard').style.display = 'none';
+    showLogin();
 }
 
 function loadTuitionData() {
@@ -89,6 +115,22 @@ function markTuitionDone() {
 }
 
 function showDashboard() {
-    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('auth-page').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
+}
+
+function showLogin() {
+    document.getElementById('login-form').style.display = 'block';
+    document.getElementById('signup-form').style.display = 'none';
+    document.getElementById('login-username').value = '';
+    document.getElementById('login-password').value = '';
+    document.getElementById('login-error').textContent = '';
+}
+
+function showSignup() {
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('signup-form').style.display = 'block';
+    document.getElementById('signup-username').value = '';
+    document.getElementById('signup-password').value = '';
+    document.getElementById('signup-error').textContent = '';
 }
