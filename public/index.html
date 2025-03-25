@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuition Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="login-page">
+        <div class="login-container">
+            <h1>Login</h1>
+            <input type="text" id="username" placeholder="Username" autocomplete="off">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="handleLogin()">Login</button>
+            <p id="login-error"></p>
+        </div>
+    </div>
+
+    <div id="dashboard">
+        <div class="dashboard-header">
+            <h1>Tuition Tracker</h1>
+            <button id="logout-btn" onclick="handleLogout()">Logout</button>
+        </div>
+        <div class="dashboard-content">
+            <div class="card">
+                <h2>Current Status</h2>
+                <p>Balance: ₹<span id="balance">0</span></p>
+                <p>Days Left This Week: <span id="days-left">0</span></p>
+                <button id="tuition-done-btn" onclick="markTuitionDone()">Mark Tuition Done</button>
+            </div>
+            <div class="card">
+                <h2>Add Advance Payment</h2>
+                <input type="number" id="payment-input" placeholder="Enter amount (₹)">
+                <button onclick="addPayment()">Add Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
