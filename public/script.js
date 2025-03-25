@@ -13,7 +13,7 @@ function handleLogin() {
     const password = document.getElementById('login-password').value;
     const error = document.getElementById('login-error');
 
-    fetch('http://localhost:3000/login', {
+    fetch('/login', {  // Relative path, works locally and on Render
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -30,7 +30,10 @@ function handleLogin() {
             error.textContent = '';
         }
     })
-    .catch(() => error.textContent = 'Server error');
+    .catch(err => {
+        console.error('Login error:', err);
+        error.textContent = 'Server error';
+    });
 }
 
 function handleSignup() {
@@ -38,7 +41,7 @@ function handleSignup() {
     const password = document.getElementById('signup-password').value;
     const error = document.getElementById('signup-error');
 
-    fetch('http://localhost:3000/signup', {
+    fetch('/signup', {  // Relative path
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -55,7 +58,10 @@ function handleSignup() {
             error.textContent = '';
         }
     })
-    .catch(() => error.textContent = 'Server error');
+    .catch(err => {
+        console.error('Signup error:', err);
+        error.textContent = 'Server error';
+    });
 }
 
 function handleLogout() {
@@ -67,7 +73,7 @@ function handleLogout() {
 }
 
 function loadTuitionData() {
-    fetch(`http://localhost:3000/tuition/${userId}`)
+    fetch(`/tuition/${userId}`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('balance').textContent = data.balance;
@@ -79,7 +85,7 @@ function addPayment() {
     const payment = parseInt(document.getElementById('payment-input').value);
     if (payment && payment > 0) {
         const daysLeft = payment / 1000;
-        fetch(`http://localhost:3000/tuition/${userId}`, {
+        fetch(`/tuition/${userId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ balance: payment, daysLeft })
@@ -94,13 +100,13 @@ function addPayment() {
 }
 
 function markTuitionDone() {
-    fetch(`http://localhost:3000/tuition/${userId}`)
+    fetch(`/tuition/${userId}`)
         .then(response => response.json())
         .then(data => {
             if (data.daysLeft > 0) {
                 const newBalance = data.balance - 1000;
                 const newDaysLeft = data.daysLeft - 1;
-                fetch(`http://localhost:3000/tuition/${userId}`, {
+                fetch(`/tuition/${userId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ balance: newBalance, daysLeft: newDaysLeft })
